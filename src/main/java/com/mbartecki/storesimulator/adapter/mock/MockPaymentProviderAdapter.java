@@ -16,6 +16,7 @@ public class MockPaymentProviderAdapter implements PaymentProviderPort {
 
   public PaymentStatus charge(Payment payment) {
     HttpClient client = HttpClient.newBuilder().build();
+    //TODO pass json instead of string
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create("http://example.com/api/payment"))
         .header("Content-Type", "application/json")

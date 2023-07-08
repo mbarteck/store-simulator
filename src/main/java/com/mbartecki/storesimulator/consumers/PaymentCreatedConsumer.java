@@ -1,11 +1,9 @@
 package com.mbartecki.storesimulator.consumers;
 
-import com.mbartecki.storesimulator.events.PaymentFinishedEvent;
 import com.mbartecki.storesimulator.model.Payment;
 import com.mbartecki.storesimulator.model.PaymentStatus;
 import com.mbartecki.storesimulator.port.PaymentProviderPort;
 import com.mbartecki.storesimulator.service.PaymentService;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -17,14 +15,11 @@ public class PaymentCreatedConsumer {
 
   private final PaymentService paymentService;
   private final PaymentProviderPort paymentProviderPort;
-  private final ApplicationEventPublisher eventPublisher;
 
   public PaymentCreatedConsumer(
-      PaymentService paymentService, PaymentProviderPort paymentProviderPort,
-      ApplicationEventPublisher eventPublisher) {
+      PaymentService paymentService, PaymentProviderPort paymentProviderPort) {
     this.paymentService = paymentService;
     this.paymentProviderPort = paymentProviderPort;
-    this.eventPublisher = eventPublisher;
   }
 
   @KafkaListener(topics = "payment-created-topic")
@@ -35,8 +30,6 @@ public class PaymentCreatedConsumer {
       Payment actualPayment = payment.get();
       PaymentStatus status = paymentProviderPort.charge(actualPayment);
       paymentService.updatePaymentStatus(actualPayment.getId(), status);
-      //TODO publish event only if update succeeded
-      eventPublisher.publishEvent(new PaymentFinishedEvent(actualPayment.getId(), status));
     }
   }
 }

@@ -11,6 +11,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -30,16 +31,15 @@ public class CheckoutAdapter implements CheckoutPort {
 
   public void process(OrderRequest orderRequest) {
     BigDecimal sum = calculateFinalPrice(orderRequest.items());
-    Payment shellPayment =
+    Payment payment =
         Payment
             .builder()
             .amount(sum)
+            .createdAt(LocalDateTime.now())
             .userEmail(orderRequest.userEmail())
             .status(PaymentStatus.NEW)
             .build();
-    Payment createdPayment = paymentService.createPayment(shellPayment);
-    kafkaTemplate.send("payment-created-topic", createdPayment.getId().toString());
-    emailSenderPort.sendEmail(createdPayment);
+    paymentService.createPayment(payment);
   }
 
   private BigDecimal calculateFinalPrice(List<CheckoutItem> items) {
