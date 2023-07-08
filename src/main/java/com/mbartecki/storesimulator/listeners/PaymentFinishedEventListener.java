@@ -7,6 +7,8 @@ import com.mbartecki.storesimulator.service.PaymentService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class PaymentFinishedEventListener implements ApplicationListener<PaymentFinishedEvent> {
 
@@ -15,8 +17,8 @@ public class PaymentFinishedEventListener implements ApplicationListener<Payment
   private final EmailSenderPort emailSenderPort;
 
 
-
-  public PaymentFinishedEventListener(PaymentService paymentService,
+  public PaymentFinishedEventListener(
+      PaymentService paymentService,
       EmailSenderPort emailSenderPort) {
     this.paymentService = paymentService;
     this.emailSenderPort = emailSenderPort;
@@ -25,8 +27,10 @@ public class PaymentFinishedEventListener implements ApplicationListener<Payment
 
   @Override
   public void onApplicationEvent(PaymentFinishedEvent event) {
-    Payment finishedPayment = paymentService.getPaymentById(event.getPaymentId());
-    emailSenderPort.sendEmail(finishedPayment);
+    Optional<Payment> finishedPayment = paymentService.getPaymentById(event.getPaymentId());
+    if (finishedPayment.isPresent()) {
+      emailSenderPort.sendEmail(finishedPayment.get());
+    }
 
   }
 }

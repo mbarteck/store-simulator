@@ -1,5 +1,10 @@
 # store-simulator
 
+# Setup
+
+```bash
+docker-compose up -d
+```
 
 # Example request
 
