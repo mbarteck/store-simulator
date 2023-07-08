@@ -39,7 +39,7 @@ public class CheckoutAdapter implements CheckoutPort {
             .userEmail(orderRequest.userEmail())
             .status(PaymentStatus.NEW)
             .build();
-    paymentService.createPayment(payment);
+    paymentService.save(payment);
   }
 
   private BigDecimal calculateFinalPrice(List<CheckoutItem> items) {

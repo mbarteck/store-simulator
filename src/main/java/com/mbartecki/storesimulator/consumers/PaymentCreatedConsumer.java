@@ -24,12 +24,13 @@ public class PaymentCreatedConsumer {
 
   @KafkaListener(topics = "payment-created-topic")
   public void receivePaymentId(String paymentIdString) {
-    Optional<Payment> payment = paymentService.getPaymentById(UUID.fromString(paymentIdString));
-    if (payment.isPresent()) {
+    Optional<Payment> optionalPayment = paymentService.getById(UUID.fromString(paymentIdString));
+    if (optionalPayment.isPresent()) {
       //TODO implement re-try
-      Payment actualPayment = payment.get();
-      PaymentStatus status = paymentProviderPort.charge(actualPayment);
-      paymentService.updatePaymentStatus(actualPayment.getId(), status);
+      Payment payment = optionalPayment.get();
+      PaymentStatus status = paymentProviderPort.charge(payment);
+      payment.setStatus(status);
+      paymentService.save(payment);
     }
   }
 }
