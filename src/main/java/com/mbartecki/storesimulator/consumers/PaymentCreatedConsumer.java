@@ -19,7 +19,6 @@ public class PaymentCreatedConsumer {
   private final PaymentProviderPort paymentProviderPort;
   private final ApplicationEventPublisher eventPublisher;
 
-
   public PaymentCreatedConsumer(
       PaymentService paymentService, PaymentProviderPort paymentProviderPort,
       ApplicationEventPublisher eventPublisher) {
@@ -36,7 +35,6 @@ public class PaymentCreatedConsumer {
       Payment actualPayment = payment.get();
       PaymentStatus status = paymentProviderPort.charge(actualPayment);
       paymentService.updatePaymentStatus(actualPayment.getId(), status);
-
       //TODO publish event only if update succeeded
       eventPublisher.publishEvent(new PaymentFinishedEvent(actualPayment.getId(), status));
     }

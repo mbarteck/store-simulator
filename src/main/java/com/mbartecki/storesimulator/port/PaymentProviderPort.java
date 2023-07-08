@@ -6,6 +6,4 @@ import com.mbartecki.storesimulator.model.PaymentStatus;
 public interface PaymentProviderPort {
 
   PaymentStatus charge(Payment payment);
-
-
 }

@@ -13,9 +13,7 @@ import java.util.Optional;
 public class PaymentFinishedEventListener implements ApplicationListener<PaymentFinishedEvent> {
 
   private final PaymentService paymentService;
-
   private final EmailSenderPort emailSenderPort;
-
 
   public PaymentFinishedEventListener(
       PaymentService paymentService,
@@ -23,7 +21,6 @@ public class PaymentFinishedEventListener implements ApplicationListener<Payment
     this.paymentService = paymentService;
     this.emailSenderPort = emailSenderPort;
   }
-
 
   @Override
   public void onApplicationEvent(PaymentFinishedEvent event) {

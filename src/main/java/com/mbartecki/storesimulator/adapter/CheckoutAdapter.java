@@ -42,7 +42,6 @@ public class CheckoutAdapter implements CheckoutPort {
     emailSenderPort.sendEmail(createdPayment);
   }
 
-
   private BigDecimal calculateFinalPrice(List<CheckoutItem> items) {
     return items.stream()
         .map(item -> item.price().multiply(BigDecimal.valueOf(item.quantity())))

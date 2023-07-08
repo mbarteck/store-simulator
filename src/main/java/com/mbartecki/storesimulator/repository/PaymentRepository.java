@@ -13,8 +13,6 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
   @Modifying
   @Query("UPDATE Payment p SET p.status = :status WHERE p.id = :paymentId")
-  void updatePaymentStatus(@Param("paymentId") UUID paymentId, @Param("status") PaymentStatus status);
-
-  @Query("SELECT p.userEmail FROM Payment p WHERE p.id = :paymentId")
-  String findEmailByPaymentId(UUID paymentId);
+  void updatePaymentStatus(
+      @Param("paymentId") UUID paymentId, @Param("status") PaymentStatus status);
 }

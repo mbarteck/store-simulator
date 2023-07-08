@@ -12,7 +12,6 @@ public class PaymentFinishedEvent extends ApplicationEvent {
   @Getter private final UUID paymentId;
   @Getter private final PaymentStatus status;
 
-
   public PaymentFinishedEvent(UUID paymentId, PaymentStatus status) {
     super(paymentId);
     this.paymentId = paymentId;
