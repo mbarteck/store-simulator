@@ -10,6 +10,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -32,14 +33,14 @@ class OutboxEventPublisherTest {
   @Test
   void testPublishPaymentCreatedEventsToKafka_withEvents() {
     List<OutboxEvent> events = new ArrayList<>();
-    events.add(new OutboxEvent(1L, "payment-created-topic", "payload1"));
-    events.add(new OutboxEvent(2L, "payment-created-topic", "payload2"));
+    events.add(new OutboxEvent(UUID.randomUUID(), "payment-created-topic", "payload1"));
+    events.add(new OutboxEvent(UUID.randomUUID(), "payment-created-topic", "payload2"));
 
     when(outboxEventRepository.findByEventName("payment-created-topic")).thenReturn(events);
 
     outboxEventPublisher.publishPaymentCreatedEventsToKafka();
 
-    verify(kafkaTemplate, times(2)).send(eq("payment-created-topic"), anyString());
+    verify(kafkaTemplate, times(2)).send(eq("payment-created-topic"), anyString(), anyString());
     verify(outboxEventRepository, times(2)).delete(any(OutboxEvent.class));
   }
 
@@ -56,14 +57,14 @@ class OutboxEventPublisherTest {
   @Test
   void testPublishSendEmailEventsToKafka_withEvents() {
     List<OutboxEvent> events = new ArrayList<>();
-    events.add(new OutboxEvent(3L, "send-email-topic", "payload1"));
-    events.add(new OutboxEvent(4L, "send-email-topic", "payload2"));
+    events.add(new OutboxEvent(UUID.randomUUID(), "send-email-topic", "payload1"));
+    events.add(new OutboxEvent(UUID.randomUUID(), "send-email-topic", "payload2"));
 
     when(outboxEventRepository.findByEventName("send-email-topic")).thenReturn(events);
 
     outboxEventPublisher.publishSendEmailEventsToKafka();
 
-    verify(kafkaTemplate, times(2)).send(eq("send-email-topic"), anyString());
+    verify(kafkaTemplate, times(2)).send(eq("send-email-topic"), anyString(), anyString());
     verify(outboxEventRepository, times(2)).delete(any(OutboxEvent.class));
   }
 
