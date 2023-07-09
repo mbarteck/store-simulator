@@ -11,8 +11,4 @@ import java.util.UUID;
 
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
-  @Modifying
-  @Query("UPDATE Payment p SET p.status = :status WHERE p.id = :paymentId")
-  void updatePaymentStatus(
-      @Param("paymentId") UUID paymentId, @Param("status") PaymentStatus status);
 }

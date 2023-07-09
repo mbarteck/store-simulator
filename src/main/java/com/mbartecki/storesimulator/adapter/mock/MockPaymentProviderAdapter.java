@@ -3,36 +3,39 @@ package com.mbartecki.storesimulator.adapter.mock;
 import com.mbartecki.storesimulator.model.Payment;
 import com.mbartecki.storesimulator.model.PaymentStatus;
 import com.mbartecki.storesimulator.port.PaymentProviderPort;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class MockPaymentProviderAdapter implements PaymentProviderPort {
 
+  private final RestTemplate restTemplate;
+
+  public MockPaymentProviderAdapter(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
+
   public PaymentStatus charge(Payment payment) {
-    HttpClient client = HttpClient.newBuilder().build();
-    //TODO pass json instead of string
-    HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("http://example.com/api/payment"))
-        .header("Content-Type", "application/json")
-        .POST(HttpRequest.BodyPublishers.ofString(payment.toString()))
-        .build();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<Payment> requestEntity = new HttpEntity<>(payment, headers);
+
     try {
-      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      switch (response.statusCode()) {
-        case 200:
-        case 201:
-          // Successful response (2xx status code range)
-          return PaymentStatus.SUCCEEDED;
-        default:
-          return PaymentStatus.FAILED;
+      ResponseEntity<Void> responseEntity = restTemplate.exchange(
+          "http://example.com/api/payment",
+          HttpMethod.POST,
+          requestEntity,
+          Void.class);
+
+      var statusCode = responseEntity.getStatusCode();
+      if (statusCode.is2xxSuccessful()) {
+        return PaymentStatus.SUCCEEDED;
+      } else {
+        return PaymentStatus.FAILED;
       }
-    } catch (IOException | InterruptedException e) {
+    } catch (RestClientException e) {
       return PaymentStatus.FAILED;
     }
   }
