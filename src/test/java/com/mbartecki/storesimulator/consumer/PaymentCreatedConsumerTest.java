@@ -52,7 +52,7 @@ class PaymentCreatedConsumerTest {
     verify(paymentProviderPort, times(1)).charge(payment);
     verify(paymentService, times(1)).save(payment);
     assertEquals(PaymentStatus.SUCCEEDED, payment.getStatus());
-    assertEquals(LocalDateTime.now().getDayOfYear(), payment.getCompletedAt().getDayOfYear());
+    assertEquals(LocalDateTime.now().getDayOfYear(), payment.getUpdatedAt().getDayOfYear());
   }
 
   @Test

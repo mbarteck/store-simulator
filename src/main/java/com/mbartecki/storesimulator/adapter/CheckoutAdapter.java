@@ -27,7 +27,6 @@ public class CheckoutAdapter implements CheckoutPort {
         Payment
             .builder()
             .amount(sum)
-            .createdAt(LocalDateTime.now())
             .userEmail(orderRequest.userEmail())
             .status(PaymentStatus.NEW)
             .build();

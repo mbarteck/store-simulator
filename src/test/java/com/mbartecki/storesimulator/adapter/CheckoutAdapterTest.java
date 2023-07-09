@@ -53,7 +53,6 @@ public class CheckoutAdapterTest {
     Assertions.assertEquals(expectedAmount, savedPayment.getAmount());
     Assertions.assertEquals(userEmail, savedPayment.getUserEmail());
     Assertions.assertEquals(PaymentStatus.NEW, savedPayment.getStatus());
-    Assertions.assertNotNull(savedPayment.getCreatedAt());
   }
 }
 

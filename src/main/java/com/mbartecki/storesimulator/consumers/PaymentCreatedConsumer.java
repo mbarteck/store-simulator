@@ -31,7 +31,6 @@ public class PaymentCreatedConsumer {
       Payment payment = optionalPayment.get();
       PaymentStatus status = paymentProviderPort.charge(payment);
       payment.setStatus(status);
-      payment.setCompletedAt(LocalDateTime.now());
       paymentService.save(payment);
     }
   }
