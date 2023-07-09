@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Builder
 @Data
@@ -16,9 +18,8 @@ import jakarta.persistence.*;
 public class OutboxEvent {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
   @Column(name = "event_name")
   private String eventName;
 

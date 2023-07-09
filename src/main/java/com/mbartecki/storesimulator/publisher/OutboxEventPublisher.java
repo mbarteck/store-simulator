@@ -38,7 +38,8 @@ public class OutboxEventPublisher {
 
   private void publishEventToKafka(OutboxEvent event) {
     String eventName = event.getEventName();
+    String id = event.getId().toString();
     String payload = event.getEventPayload();
-    kafkaTemplate.send(eventName, payload);
+    kafkaTemplate.send(eventName, id, payload);
   }
 }
