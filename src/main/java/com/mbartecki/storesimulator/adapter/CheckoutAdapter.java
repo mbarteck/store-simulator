@@ -8,7 +8,6 @@ import com.mbartecki.storesimulator.service.PaymentService;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import static com.mbartecki.storesimulator.utils.CalculationsUtils.calculateFinalPrice;
 
