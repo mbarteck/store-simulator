@@ -105,13 +105,13 @@ In the console you should see:
 ### MAIL SERVICE ###
 Sending email to: example@example.com
 Subject: Payment has been created
-Body: Payment with ID a61b317f-1695-4be8-bedf-af476558057d has been created
+Body: Payment with ID bdb679c8-12da-4de3-b256-20ff9e59a257 has been created
 Email sent successfully!
 
 ### MAIL SERVICE ###
 Sending email to: example@example.com
-Subject: Payment failed
-Body: Payment with ID a61b317f-1695-4be8-bedf-af476558057d failed
+Subject: Payment succeeded
+Body: Payment with ID bdb679c8-12da-4de3-b256-20ff9e59a257 succeeded
 Email sent successfully!
 
 ```

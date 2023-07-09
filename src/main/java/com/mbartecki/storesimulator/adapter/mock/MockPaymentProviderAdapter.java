@@ -24,7 +24,7 @@ public class MockPaymentProviderAdapter implements PaymentProviderPort {
 
     try {
       ResponseEntity<Void> responseEntity = restTemplate.exchange(
-          "http://example.com/api/payment",
+          "http://localhost:8081/mock/payment",
           HttpMethod.POST,
           requestEntity,
           Void.class);
