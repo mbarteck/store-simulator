@@ -1,12 +1,72 @@
-# store-simulator
+# Store Simulator
+This is a simple backend application written in Java that simulates the behavior of an online store. The application provides REST APIs to handle a user's shopping cart and payment transactions. It utilizes Kafka as a messaging system and H2 database for data storage.
 
-# Setup
+## Designed flow
+- The checkout API receives a request.
+- A new payment is created and stored in the database.
+- Within the same transaction, two outbox events are saved in the database:
+    - the first event contains details of the transaction,
+    - the second event contains details of the email.
+- The outbox event publisher retrieves the events from the database and publishes them to 2 separate topics in the Kafka queueing system.
+- The payment consumer receives the relevant event from the queue and attempts the payment with the mock payment provider.
+- Depending on the outcome form payment provider, the payment consumer updates the status of the payment in the database.
+- Within the same transaction, one outbox event with email details is saved in the database.
+- Simultaneously, the email consumer retrieves the relevant events from the queue and simulates sending the email (printed to the console).
+
+This flow ensures that the payment and email events are processed atomically and consistently, maintaining data integrity and reliable message delivery.
+
+## Prerequisites
+Make sure you have the following software installed on your system:
+
+- Docker
+- Java 17
+- Maven
+
+## Setup
+- Enter project directory
+- Start a Kafka instance defined in `docker-compose.yml` file:
 
 ```bash
 docker-compose up -d
 ```
 
-# Example request
+- Build project:
+
+```bash
+mvn clean install
+```
+
+- Run jar:
+
+```bash
+java -jar target/store-simulator-0.0.1-SNAPSHOT.jar
+```
+
+## Usage
+
+### Checkout API
+The application provides a single API endpoint for processing an order by receiving a cart request. The endpoint is exposed at `/checkout` and accepts a POST request with the following JSON payload:
+
+### Request
+
+```json
+{
+  "userEmail": "string",
+  "items": [
+    {
+      "productId": "integer",
+      "price": "number",
+      "quantity": "integer"
+    },
+    ...
+  ]
+}
+```
+
+The `userEmail` field should contain the email address of the user placing the order. The `items` field should be an array of objects representing the `items` in the cart. Each item object should have the `productId` (integer), `price` (number), and `quantity` (integer) fields specifying the details of the item.
+
+### Example request
+You can use the following cURL command to send a sample request to the application:
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{
@@ -33,5 +93,27 @@ curl -X POST -H "Content-Type: application/json" -d '{
       "quantity": 1
     }
   ]
-}' http://localhost:8080/checkout
+}' http://localhost:8081/checkout
 ```
+
+Replace http://localhost:8081 with the actual URL of the application.
+
+### Expected output
+In the console you should see:
+
+```
+### MAIL SERVICE ###
+Sending email to: example@example.com
+Subject: Payment has been created
+Body: Payment with ID a61b317f-1695-4be8-bedf-af476558057d has been created
+Email sent successfully!
+
+### MAIL SERVICE ###
+Sending email to: example@example.com
+Subject: Payment failed
+Body: Payment with ID a61b317f-1695-4be8-bedf-af476558057d failed
+Email sent successfully!
+
+```
+
+This indicates that the designed flow has taken place.
