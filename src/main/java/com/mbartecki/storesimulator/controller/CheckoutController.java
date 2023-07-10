@@ -22,7 +22,8 @@ class CheckoutController {
   CheckoutController(CheckoutPort checkoutPort) {this.checkoutPort = checkoutPort;}
 
   @PostMapping("/checkout")
-  public ResponseEntity<String> receiveCart(@Valid @RequestBody OrderRequest cartRequest, BindingResult bindingResult) {
+  public ResponseEntity<String> receiveCart(
+      @Valid @RequestBody OrderRequest cartRequest, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       List<String> errors = bindingResult.getFieldErrors().stream()
           .map(FieldError::getDefaultMessage)

@@ -46,7 +46,8 @@ class OutboxEventPublisherTest {
 
   @Test
   void testPublishPaymentCreatedEventsToKafka_withoutEvents() {
-    when(outboxEventRepository.findByEventName("payment-created-topic")).thenReturn(new ArrayList<>());
+    when(outboxEventRepository.findByEventName("payment-created-topic")).thenReturn(
+        new ArrayList<>());
 
     outboxEventPublisher.publishPaymentCreatedEventsToKafka();
 

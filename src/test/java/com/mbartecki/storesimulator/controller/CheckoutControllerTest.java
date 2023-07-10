@@ -64,7 +64,8 @@ class CheckoutControllerTest {
   void testReceiveCart_NegativePrice_ValidationFailure() throws Exception {
     // Arrange
     CheckoutItem item = new CheckoutItem(1L, new BigDecimal(-10), 1L);
-    OrderRequest cartRequest = new OrderRequest("valid@example.com", Collections.singletonList(item));
+    OrderRequest cartRequest =
+        new OrderRequest("valid@example.com", Collections.singletonList(item));
 
     // Act & Assert
     mockMvc.perform(post("/checkout")
@@ -80,7 +81,8 @@ class CheckoutControllerTest {
   void testReceiveCart_NegativeQuantity_ValidationFailure() throws Exception {
     // Arrange
     CheckoutItem item = new CheckoutItem(1L, BigDecimal.valueOf(10), -1L);
-    OrderRequest cartRequest = new OrderRequest("valid@example.com", Collections.singletonList(item));
+    OrderRequest cartRequest =
+        new OrderRequest("valid@example.com", Collections.singletonList(item));
 
     // Act & Assert
     mockMvc.perform(post("/checkout")
@@ -96,7 +98,8 @@ class CheckoutControllerTest {
   void testReceiveCart_ValidRequest_SuccessfulProcessing() throws Exception {
     // Arrange
     CheckoutItem item = new CheckoutItem(1L, BigDecimal.valueOf(10), 1L);
-    OrderRequest cartRequest = new OrderRequest("valid@example.com", Collections.singletonList(item));
+    OrderRequest cartRequest =
+        new OrderRequest("valid@example.com", Collections.singletonList(item));
 
     // Act & Assert
     mockMvc.perform(post("/checkout")

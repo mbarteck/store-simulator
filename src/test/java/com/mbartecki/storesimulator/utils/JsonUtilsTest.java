@@ -1,6 +1,5 @@
 package com.mbartecki.storesimulator.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mbartecki.storesimulator.dto.EmailDto;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,8 @@ class JsonUtilsTest {
   void serialize_ValidObject_ShouldReturnJsonString() {
     // Arrange
     EmailDto emailDto = new EmailDto("example@example.com", "Subject", "Body");
-    String expectedJson = "{\"to\":\"example@example.com\",\"subject\":\"Subject\",\"body\":\"Body\"}";
+    String expectedJson =
+        "{\"to\":\"example@example.com\",\"subject\":\"Subject\",\"body\":\"Body\"}";
 
     // Act
     String json = JsonUtils.serialize(emailDto);

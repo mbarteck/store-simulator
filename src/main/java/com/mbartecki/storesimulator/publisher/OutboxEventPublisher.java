@@ -10,10 +10,12 @@ import java.util.List;
 
 @Service
 public class OutboxEventPublisher {
+
   private final OutboxEventRepository outboxEventRepository;
   private final KafkaTemplate<String, String> kafkaTemplate;
 
-  public OutboxEventPublisher(OutboxEventRepository outboxEventRepository, KafkaTemplate<String, String> kafkaTemplate) {
+  public OutboxEventPublisher(
+      OutboxEventRepository outboxEventRepository, KafkaTemplate<String, String> kafkaTemplate) {
     this.outboxEventRepository = outboxEventRepository;
     this.kafkaTemplate = kafkaTemplate;
   }
