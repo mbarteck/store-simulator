@@ -31,7 +31,7 @@ class SendEmailConsumerTest {
     EmailDto emailDto = new EmailDto("example@example.com", "Test Subject", "Test Body");
 
     // Act
-    sendEmailConsumer.receiveEmailDto(jsonString);
+    sendEmailConsumer.processEmailDto(jsonString);
 
     // Assert
     verify(emailSenderPort, times(1)).sendEmail(emailDto);

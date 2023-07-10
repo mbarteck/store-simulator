@@ -12,7 +12,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.serializer.DeserializationException;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import static com.mbartecki.storesimulator.utils.JsonUtils.deserialize;
@@ -31,13 +30,14 @@ public class SendEmailConsumer {
       attempts = "5",
       topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE,
       backoff = @Backoff(delay = 1000, multiplier = 2.0),
-      exclude = { DeserializationException.class}
+      exclude = { DeserializationException.class }
   )
   @KafkaListener(topics = "send-email-topic")
-  public void receiveEmailDto(String jsonString) {
+  public void processEmailDto(String jsonString) {
     EmailDto emailDto = deserialize(jsonString, EmailDto.class);
     emailSenderPort.sendEmail(emailDto);
   }
+
   @DltHandler
   public void handleDlt(String message, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
     log.info("Message: {} handled by dlq topic: {}", message, topic);

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,7 +44,7 @@ class PaymentCreatedConsumerTest {
     when(paymentProviderPort.charge(payment)).thenReturn(PaymentStatus.SUCCEEDED);
 
     // Act
-    paymentCreatedConsumer.receivePaymentId(paymentIdString);
+    paymentCreatedConsumer.processNewPayment(paymentIdString);
 
     // Assert
     verify(paymentService, times(1)).getById(paymentId);
@@ -63,7 +62,7 @@ class PaymentCreatedConsumerTest {
     when(paymentService.getById(paymentId)).thenReturn(Optional.empty());
 
     // Act
-    paymentCreatedConsumer.receivePaymentId(paymentIdString);
+    paymentCreatedConsumer.processNewPayment(paymentIdString);
 
     // Assert
     verify(paymentService, times(1)).getById(paymentId);
